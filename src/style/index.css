@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    padding         : 5px 15px;
+    cursor          : pointer;
+    background-color: whitesmoke;
+}
+
+#addLine:hover {
+    background-color: orange;
+    color           : black;
+
+}
+
+#disableLine:hover {
+    background-color: tomato;
+    color           : black;
+}
+
+.toolBar {
+    position        : fixed;
+    top             : 0px;
+    left            : 0;
+    right           : 0;
+    height          : 50px;
+    padding         : 0 10px;
+    background-color: gray;
+    display         : flex;
+    align-items     : center;
+    gap             : 10px;
+}

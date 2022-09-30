@@ -32,5 +32,5 @@ while we’re actually working on the lower canvas layer & The lower canvas cont
 ```
 
 
-* `canvas.clear()` will clear all objects on canvas
-* `canvas.dispose()` will clear all objects on canvas & remove all listeners
+* `canvas.clear()` will clear all objects on canvas.
+* `canvas.dispose()` will clear all objects on canvas & remove all listeners.

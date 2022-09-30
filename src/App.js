@@ -1,7 +1,6 @@
 import Canvas from './components/Canvas'
 import CanvasLine from './components/CanvasLine'
 import CanvasState from './components/CanvasState'
-import Cav from './components/Cav'
 
 
 const App = () => {

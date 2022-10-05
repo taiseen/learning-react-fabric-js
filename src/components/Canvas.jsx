@@ -61,16 +61,16 @@ const Canvas = () => {
 
   const objectSelected = () => {
     // canvasObj.current.on('selection:created', e => {
-      canvasObj.current.on('selection:updated', o => {
+    canvasObj.current.on('selection:updated', o => {
 
-    // if value is undefined, exit form this function... 
-    if (o?.e === undefined || o?.selected[0] === undefined) return;
+      // if value is undefined, exit form this function... 
+      if (o?.e === undefined || o?.selected[0] === undefined) return;
 
-    const selectedObj = o?.selected[0];
-    console.log(selectedObj)
+      const selectedObj = o?.selected[0];
+      console.log(selectedObj)
 
-    selectedObj.set('fill', colorSelect);
-    canvasObj.current?.renderAll();
+      selectedObj.set('fill', colorSelect);
+      canvasObj.current?.renderAll();
 
     })
 

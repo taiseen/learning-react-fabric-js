@@ -18,8 +18,6 @@ const App = () => {
 
       {/* <CanvasLine /> */}
 
-      {/* <Cav /> */}
-
       {/* <CanvasState /> */}
     </main>
   )

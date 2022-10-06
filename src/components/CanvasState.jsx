@@ -203,7 +203,7 @@ const CanvasState = () => {
   }
 
 
-
+  // print all object at Console
   const displayAllObj = _ => {
 
     canvas.getObjects().forEach(obj => {
@@ -254,9 +254,6 @@ const CanvasState = () => {
 
 
 
-
-
-
   // canvas drawing - save as image & download it...
   const saveAsImg = _ => {
 
@@ -296,6 +293,7 @@ const CanvasState = () => {
   }
 
 
+  // user search by typing at input field...
   const handleSearchText = e => {
 
     // async work | execute at background 
@@ -308,9 +306,12 @@ const CanvasState = () => {
 
         if (obj?.text?.includes(textSearching)) {
 
+          // change corner + border color ...
+          obj.set({ cornerColor: '#FF5F5F' , borderColor : '#FF5F5F' })
+
           // select Fabric.js object programmatically
-          const text = canvas.setActiveObject(obj)
-          console.log(text);
+          canvas.setActiveObject(obj)
+
           // ?.text.replaceAll(textSearching, `<mark>${textSearching}</mark>`)
           console.log(obj?.text)
         }

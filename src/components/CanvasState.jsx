@@ -15,6 +15,7 @@ const CanvasState = () => {
 
   const posX = (canvas.width - 50) * Math.random();
   const posY = (canvas.height - 50) * Math.random();
+  let json
 
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const CanvasState = () => {
       width: 1000,
       height: 600,
       backgroundColor: '#FEFEFE',
+      // selection: false, // disables drag-to-select
       // defaultCursor:
     });
 
@@ -45,7 +47,38 @@ const CanvasState = () => {
     });
 
 
+    // only for zooming the canvas...
+    initCanvas.on('mouse:wheel', (object) => {
+      let delta = object.e.deltaY;
+      let zoom = initCanvas.getZoom();
+      zoom *= 0.999 ** delta;
 
+      if (zoom > 20) zoom = 20;
+      if (zoom < 0.01) zoom = 0.01;
+
+      // top left ==> to ==> bottom right ==> zoom
+      // initCanvas.setZoom(zoom); 
+
+      // where the mouse point is present, at there zoom in OR zoom out by the help of mouse while scroll up & down
+      initCanvas.zoomToPoint({ x: object.e.offsetX, y: object.e.offsetY }, zoom);
+
+      object.e.preventDefault();
+      object.e.stopPropagation();
+    });
+
+    const canvasSaveLocally = localStorage.getItem('canvas');
+    if (canvasSaveLocally) {
+      console.log('no canvas');
+      // canvas.loadFromJSON(
+      //   JSON.parse(canvasSaveLocally),
+      //   canvas.renderAll.bind(canvas),
+      //   // function (o, object) {
+      //   //   fabric.log(o, object);
+      //   //   console.log(o)
+      //   //   console.log(object)
+      //   // }
+      //   );
+    }
 
     return () => initCanvas.dispose();
 
@@ -74,14 +107,17 @@ const CanvasState = () => {
   }
 
   const objectSelected = o => {
-    // console.log(o)
 
     // if value is undefined, exit form this function... 
     if (o?.e === undefined || o?.selected[0] === undefined) return;
 
     const selectedObj = o?.selected[0];
-    console.log(selectedObj.type)
+    selectedObj.set({
+      borderColor: 'gray',
+      hasControls: true,
+    })
 
+    console.log(selectedObj.type)
     // if (selectedObj.type) {
     //   setObjectSelectForDelete(true)
     //   console.log('inside ==> ', objectSelectForDelete);
@@ -141,9 +177,18 @@ const CanvasState = () => {
       originX: 'center',
       originY: 'center',
       fill: colorSelect,
-      cornerColor: colorSelect,
       objectCaching: false,
       padding: 10,
+      cornerColor: colorSelect,
+      cornerStyle: 'circle',
+      cornerStrokeColor: colorSelect,
+      borderDashArray: [5, 5],
+      borderColor: '#000000',
+      transparentCorners: true,
+      lockRotation: true, // can not rotate 
+      erasable: false, // can not erase it by erase tool-brush...
+
+
     });
 
     // Render Circle on Canvas
@@ -189,8 +234,11 @@ const CanvasState = () => {
         editable: true,
         left: posX,
         top: posY,
-        fontSize: 60,
-        fill: colorSelect
+        fill: colorSelect,
+        fontFamily: 'Arial',
+        fontSize: 50,
+        // fontWeight: 'bold',
+        // fontStyle: 'italic'
       }
     );
 
@@ -229,29 +277,45 @@ const CanvasState = () => {
 
   const drawing = _ => {
 
-    canvas.freeDrawingBrush = new fabric.SprayBrush(canvas); // PatternBrush
+    // fabric.PencilBrush.prototype.globalCompositeOperation = "source-over";
+
+    // SprayBrush
+    // CircleBrush
+    // PencilBrush
+    // PatternBrush
+
+    canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+    canvas.freeDrawingBrush.color = colorSelect;
     canvas.freeDrawingBrush.width = 5;
-    canvas.isDrawingMode = true;
+    canvas.isDrawingMode = true; // very very important...
+
+    // canvas.on('mouse:move', (object) => {
+    //   canvas.setCursor('grab');
+    //   canvas.renderAll();
+    //   const drawLine = new fabric.Point(object.e.movementX, object.e.movementY);
+    //   canvas.relativePan(drawLine);
+    // });
 
     canvas.on('mouse:up', () => canvas.isDrawingMode = false);
   }
 
 
-
   const eraseDrawing = _ => {
     console.log('eraseing,,,,')
 
-    // //  same as `PencilBrush`
-    // canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
-    // canvas.isDrawingMode = true;
-    // //  optional
-    // canvas.freeDrawingBrush.width = 10;
+      //  same as `PencilBrush`
+      canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
+      canvas.isDrawingMode = true;
+      //  optional
+      canvas.freeDrawingBrush.width = 10;
 
-    // //  undo erasing
-    // canvas.freeDrawingBrush.inverted = true;
+      //  undo erasing
+      canvas.freeDrawingBrush.inverted = true;
+
+
+      // = fabric.util.createClass(fabric.BaseBrush, {})
 
   }
-
 
 
   // canvas drawing - save as image & download it...
@@ -268,6 +332,14 @@ const CanvasState = () => {
     link.download = `${Date(Date.now()).slice(0, 24)}.${ext}`;
     link.click();
   }
+
+
+  const saveCanvas = () => {
+    const json = canvas.toJSON();
+    console.log(json)
+    localStorage.setItem('canvas', JSON.stringify(json)); // save into local storage
+  }
+
 
   // delete selected one...
   // 🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
@@ -290,6 +362,9 @@ const CanvasState = () => {
   // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
   const delete_all_object_from_canvas = _ => {
     canvas.getObjects().forEach(obj => canvas.remove(obj))
+
+    // clear init canvas also...
+    // canvas.clear();
   }
 
 
@@ -306,8 +381,12 @@ const CanvasState = () => {
 
         if (obj?.text?.includes(textSearching)) {
 
-          // change corner + border color ...
-          obj.set({ cornerColor: '#FF5F5F' , borderColor : '#FF5F5F' })
+          // change border color + control false...
+          obj.set({
+            borderColor: '#FF5F5F',
+            hasControls: false
+          })
+
 
           // select Fabric.js object programmatically
           canvas.setActiveObject(obj)
@@ -376,7 +455,6 @@ const CanvasState = () => {
       </div>
 
 
-
       <div className=' flex justify-between items-center'>
         <div className='flex items-center gap-4 my-2'>
           <div className='flex gap-2 my-2'>
@@ -396,12 +474,15 @@ const CanvasState = () => {
 
         </div>
 
-        <div>
+        <div className='flex gap-2'>
+          <p onClick={saveCanvas} className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'>save canvas</p>
           <p onClick={saveAsImg} className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'>save as img</p>
         </div>
       </div>
 
+
       <canvas id="canvas" ref={fabricObj} />
+
     </div>
 
   )

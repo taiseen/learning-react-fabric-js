@@ -7,6 +7,7 @@ const CanvasState = () => {
 
   const fabricObj = useRef(null);
   const [canvas, setCanvas] = useState({});
+  const [svgLoad, setSvgLoad] = useState([])
   const [userInputText, setUserInputText] = useState('');
   const [textSearching, setTextSearching] = useState('');
   const [colorSelect, setColorSelect] = useState('blue');
@@ -79,6 +80,12 @@ const CanvasState = () => {
       //   // }
       //   );
     }
+
+
+
+
+
+
 
     return () => initCanvas.dispose();
 
@@ -303,17 +310,17 @@ const CanvasState = () => {
   const eraseDrawing = _ => {
     console.log('eraseing,,,,')
 
-      //  same as `PencilBrush`
-      canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
-      canvas.isDrawingMode = true;
-      //  optional
-      canvas.freeDrawingBrush.width = 10;
+    //  same as `PencilBrush`
+    canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
+    canvas.isDrawingMode = true;
+    //  optional
+    canvas.freeDrawingBrush.width = 10;
 
-      //  undo erasing
-      canvas.freeDrawingBrush.inverted = true;
+    //  undo erasing
+    canvas.freeDrawingBrush.inverted = true;
 
 
-      // = fabric.util.createClass(fabric.BaseBrush, {})
+    // = fabric.util.createClass(fabric.BaseBrush, {})
 
   }
 
@@ -416,7 +423,24 @@ const CanvasState = () => {
 
   // }, [textSearching,canvas])
 
+  const loadSVG = e => {
+    setSvgLoad(e.target.files[0])
 
+    const data = new FormData();
+    data.append('file', svgLoad)
+    
+    fabric.loadSVGFromURL('http://fabricjs.com/assets/1.svg',function(objects, options){
+      var svgData = fabric.util.groupSVGElements(objects, options);
+      
+      svgData.top = 100;
+      svgData.left = 250;
+      // svgData.fill = 'red';
+
+      canvas.add(svgData);
+    });
+  }
+
+  console.log(svgLoad);
   return (
     <div>
 
@@ -475,6 +499,18 @@ const CanvasState = () => {
         </div>
 
         <div className='flex gap-2'>
+          <label
+            htmlFor='svg'
+            className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'
+          >SVG Upload
+          </label>
+          <input
+            id='svg'
+            type="file"
+            onChange={loadSVG}
+            style={{ display: 'none' }}
+          />
+
           <p onClick={saveCanvas} className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'>save canvas</p>
           <p onClick={saveAsImg} className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'>save as img</p>
         </div>

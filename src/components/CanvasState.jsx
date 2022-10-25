@@ -7,7 +7,7 @@ const CanvasState = () => {
 
   const fabricObj = useRef(null);
   const [canvas, setCanvas] = useState({});
-  const [svgLoad, setSvgLoad] = useState([])
+  const [svgLoad, setSvgLoad] = useState([]);
   const [userInputText, setUserInputText] = useState('');
   const [textSearching, setTextSearching] = useState('');
   const [colorSelect, setColorSelect] = useState('blue');
@@ -16,14 +16,14 @@ const CanvasState = () => {
 
   const posX = (canvas.width - 50) * Math.random();
   const posY = (canvas.height - 50) * Math.random();
-  let json
 
 
   useEffect(() => {
 
+    // 1st init fabric canvas object... 
     const initCanvas = new fabric.Canvas(fabricObj.current, {
       width: 1000,
-      height: 600,
+      height: 650,
       backgroundColor: '#FEFEFE',
       // selection: false, // disables drag-to-select
       // defaultCursor:
@@ -31,6 +31,18 @@ const CanvasState = () => {
 
     setCanvas(initCanvas);
 
+    // get old data from localStorage
+    let oldSavedCanvasLocally = JSON.parse(localStorage.getItem('canvas'));
+
+    if (oldSavedCanvasLocally) {
+      // canvas initialized from save data that present at localStorage
+      initCanvas.loadFromJSON(oldSavedCanvasLocally)
+    } else {
+      console.log('new fresh canvas start');
+    }
+
+
+    // these are mouse events...
     // mouseHoverIn(initCanvas);
     // mouseHoverOut(initCanvas);
     // objectSelected(initCanvas);
@@ -66,25 +78,6 @@ const CanvasState = () => {
       object.e.preventDefault();
       object.e.stopPropagation();
     });
-
-    const canvasSaveLocally = localStorage.getItem('canvas');
-    if (canvasSaveLocally) {
-      console.log('no canvas');
-      // canvas.loadFromJSON(
-      //   JSON.parse(canvasSaveLocally),
-      //   canvas.renderAll.bind(canvas),
-      //   // function (o, object) {
-      //   //   fabric.log(o, object);
-      //   //   console.log(o)
-      //   //   console.log(object)
-      //   // }
-      //   );
-    }
-
-
-
-
-
 
 
     return () => initCanvas.dispose();
@@ -122,9 +115,12 @@ const CanvasState = () => {
     selectedObj.set({
       borderColor: 'gray',
       hasControls: true,
+      // fill: colorSelect,
     })
 
     console.log(selectedObj.type)
+
+    return selectedObj;
     // if (selectedObj.type) {
     //   setObjectSelectForDelete(true)
     //   console.log('inside ==> ', objectSelectForDelete);
@@ -341,7 +337,7 @@ const CanvasState = () => {
   }
 
 
-  const saveCanvas = () => {
+  const saveCanvas = _ => {
     const json = canvas.toJSON();
     console.log(json)
     localStorage.setItem('canvas', JSON.stringify(json)); // save into local storage
@@ -350,7 +346,7 @@ const CanvasState = () => {
 
   // delete selected one...
   // 🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
-  const delete_selected_object = _ => {
+  const delete_single_selected_object = _ => {
 
     // loop through all objects, that present in canvas
     canvas.getObjects().forEach(obj => {
@@ -361,7 +357,12 @@ const CanvasState = () => {
         canvas.remove(obj)
       }
     })
+  }
 
+  const delete_multiple_selected_object = multipleObject => {
+    // loop through all objects, that present in canvas
+    // & delete OR remove it from canvas... 
+    multipleObject.forEach(obj => canvas.remove(obj))
   }
 
 
@@ -406,32 +407,102 @@ const CanvasState = () => {
 
   }
 
-  // useEffect(() => {
-  //   console.log(canvas !== undefined);
-  //   // loop through all objects, that present inside canvas
-  //   if(Object.keys(canvas).length !== 0){
-  //     canvas.getObjects().forEach(obj => {
+  const copy = _ => {
+    let activeObj = canvas.getActiveObject();
+    // console.log(activeObj)
 
-  //       if (obj?.text?.includes(textSearching)) {
+    activeObj.clone(function (cloned) {
+      canvas._clipboard = cloned;
+      console.log(canvas)
+    });
 
-  //         // select Fabric.js object programmatically
-  //         canvas.setActiveObject(obj)
-  //         console.log(obj?.text)
-  //       }
-  //     })
-  //   }
+  }
 
-  // }, [textSearching,canvas])
+  const past = _ => {
+    let activeObj = canvas.getActiveObject();
+    if (!activeObj) {
+      return;
+    }
+    console.log(activeObj)
+    console.log('past')
+    // let pointerLeft = pointer.x;
+    // let pointerTop = pointer.y;
+  }
+
+  const selectAll = _ => {
+    let selectAllObject = canvas.getObjects()
+
+    // deselect currently active or selected objects from the canvas.
+    canvas.discardActiveObject();
+
+    const selectedObjects = new fabric.ActiveSelection(selectAllObject, { canvas: canvas, });
+    canvas.setActiveObject(selectedObjects);
+    canvas.requestRenderAll();
+  }
+
+
+
+  useEffect(() => {
+
+    // user keyboard, key pressing for object interaction...
+    const handleKeyDownEvent = e => {
+
+      // delete ==> key press
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+
+        // just get selected object from canvas...
+        const single_object_selected = canvas.getActiveObject();
+
+        // for singe selected object delete operation
+        if (single_object_selected) {
+          delete_single_selected_object();
+        }
+
+        // for multiple selected object delete operation
+        if (single_object_selected?._objects?.length) {
+          delete_multiple_selected_object(single_object_selected?._objects)
+        }
+
+      }
+
+      // ctrl + c ==> key press | for copy
+      if (e.key === 'c') copy();
+
+      // ctrl + v ==> key press | for past
+      if (e.key === 'v') past();
+
+      // ctrl + a ==> key press | for selecting all
+      if (e.key === 'a') selectAll();
+
+      // ctrl + s ==> key press | for save canvas as JSON format to load next time
+      if (e.key === 's') saveCanvas();
+
+      // ctrl + s ==> key press | for save as image formate
+      if (e.key === 'i') saveAsImg();
+
+    }
+
+
+    window.addEventListener('keydown', handleKeyDownEvent);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDownEvent);
+    };
+  }, [canvas])
+
 
   const loadSVG = e => {
-    setSvgLoad(e.target.files[0])
-
+    // setSvgLoad(e.target.files[0])
+    const files = e.target.files
     const data = new FormData();
-    data.append('file', svgLoad)
-    
-    fabric.loadSVGFromURL('http://fabricjs.com/assets/1.svg',function(objects, options){
+    data.append('svg', files[0])
+    console.log(data)
+    let img = 'http://fabricjs.com/assets/1.svg';
+    console.log(img)
+
+    fabric.loadSVGFromURL(img, function (objects, options) {
       var svgData = fabric.util.groupSVGElements(objects, options);
-      
+
       svgData.top = 100;
       svgData.left = 250;
       // svgData.fill = 'red';
@@ -440,7 +511,7 @@ const CanvasState = () => {
     });
   }
 
-  console.log(svgLoad);
+
   return (
     <div>
 
@@ -471,7 +542,7 @@ const CanvasState = () => {
             onKeyDown={e => e.key === 'Enter' && [drawText(), setTextSearching('')]}
           />
 
-          <button className={`px-2 py-1 rounded-sm ${objectSelectForDelete ? 'bg-red-400 ' : 'bg-gray-400 '}`} onClick={() => delete_selected_object()}>Delete it</button>
+          <button className={`px-2 py-1 rounded-sm ${objectSelectForDelete ? 'bg-red-400 ' : 'bg-gray-400 '}`} onClick={() => delete_single_selected_object()}>Delete it</button>
           {/* <button className={`px-2 py-1 rounded-sm bg-red-400`} onClick={() => delete_selected_object()}>Delete it</button> */}
           <button className='px-2 py-1 bg-gray-500 hover:bg-red-500 duration-200 rounded-sm text-white' onClick={() => delete_all_object_from_canvas()}>Clear Canvas</button>
         </div>

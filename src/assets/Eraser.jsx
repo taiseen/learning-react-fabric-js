@@ -8,6 +8,8 @@ const Eraser = props => {
       viewBox="0 0 17.093 16.301"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Eraser</title>
+
       <path
         id="bx-eraser"
         fill="currentColor"

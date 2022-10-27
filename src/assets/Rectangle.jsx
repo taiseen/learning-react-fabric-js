@@ -8,6 +8,8 @@ const Rectangle = props => {
       viewBox="0 0 16.301 16.301"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Rectangle</title>
+
       <path
         fill="currentColor"
         id="square-regular"

@@ -8,6 +8,8 @@ const Circle = props => {
       viewBox="0 0 16.301 16.301"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Circle</title>
+      
       <path
         fill="currentColor"
         id="circle-regular"

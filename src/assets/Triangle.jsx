@@ -8,6 +8,8 @@ const Triangle = props => {
       viewBox="0 0 17.874 15.711"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Triangle</title>
+
       <path
         id="triangle"
         fill="currentColor"

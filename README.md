@@ -10,18 +10,20 @@
 
 ### Fabric Js 
 
- * yarn add fabric  | Object model for HTML5 canvas, and SVG-to-canvas parser. Backed by jsdom and node-canvas
+ * `yarn add fabric` | Object model for HTML5 canvas, and SVG-to-canvas parser. Backed by jsdom and node-canvas
 
 
 ## Features:-
 
-* save data at local storage 
-* load data from local storage
-* single object delete operation 
-* multiple object delete operation 
-* save as image, whole canvas drawing
-* select all object that draw in canvas 
+* 💾 save data at local storage + ⌨ key operation
+* 🔄 load data from local storage
+* ❌ single object delete operation + ⌨ key operation
+* ⛔ multiple object delete operation + ⌨ key operation
+* 📸 save as image, whole canvas drawing + ⌨ key operation
+* 🅰 select all object that draw in canvas + ⌨ key operation
+* 🔎 canvas zoom functionality 
 
+<br/>
 
 ```
 Developers describe Fabric.js as "The easiest way to work with HTML5 canvas". 

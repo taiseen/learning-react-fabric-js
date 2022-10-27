@@ -7,19 +7,19 @@ export const handleSearchText = (canvas, textSearching) => {
     // sync work | execute it right now...
     if (Object.keys(canvas).length !== 0) {
 
-        canvas.getObjects().forEach(obj => {
+        canvas?.getObjects()?.forEach(obj => {
 
             if (obj?.text?.includes(textSearching)) {
 
                 // change border color + control false...
-                obj.set({
+                obj?.set({
                     borderColor: '#FF5F5F',
                     hasControls: false
                 })
 
 
                 // select Fabric.js object programmatically
-                canvas.setActiveObject(obj)
+                canvas?.setActiveObject(obj)
 
                 // ?.text.replaceAll(textSearching, `<mark>${textSearching}</mark>`)
                 console.log(obj?.text)

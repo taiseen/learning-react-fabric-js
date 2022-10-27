@@ -28,7 +28,7 @@ const CanvasState = () => {
   useEffect(() => {
 
     // 1st init fabric canvas object... 
-    const initCanvas = new fabric.Canvas(fabricObj.current, {
+    const initCanvas = new fabric.Canvas(fabricObj?.current, {
       width: 1000,
       height: 650,
       backgroundColor: '#FEFEFE',
@@ -38,17 +38,18 @@ const CanvasState = () => {
 
     setCanvas(initCanvas);
 
-    // get old data from localStorage
-    let oldSavedCanvasLocally = JSON.parse(localStorage.getItem('canvas'));
+    // preventing from crash, when data become ==> undefined
+    try {
+      // get old data from localStorage if have...
+      const oldSavedCanvasLocally = localStorage.getItem('canvas') !== 'undefined'
+        ? JSON.parse(localStorage.getItem('canvas'))
+        : localStorage.removeItem('canvas');
 
-    if (oldSavedCanvasLocally) {
-      // if save data that present at localStorage 
-      // initialized canvas from that data... 
-      initCanvas.loadFromJSON(oldSavedCanvasLocally)
-    } else {
-      console.log('new fresh canvas start');
+      initCanvas?.loadFromJSON(oldSavedCanvasLocally);
+
+    } catch (e) {
+      console.log(e);
     }
-
 
     // these are mouse events...
     // mouseHoverIn(initCanvas);
@@ -303,6 +304,7 @@ const CanvasState = () => {
               // color display at ui + its according click functionality
               colorList.map(color =>
                 <div
+                  title={color}
                   key={color}
                   onClick={() => setColorSelect(color)}
                   style={{ backgroundColor: color }}

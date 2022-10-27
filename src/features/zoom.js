@@ -1,6 +1,6 @@
 export const zoom = (object, initCanvas) => {
 
-    let delta = object.e.deltaY;
+    let delta = object?.e.deltaY;
 
     let zoom = initCanvas.getZoom();
     zoom *= 0.999 ** delta;
@@ -12,8 +12,8 @@ export const zoom = (object, initCanvas) => {
     // initCanvas.setZoom(zoom); 
 
     // where the mouse point is present, at there zoom in OR zoom out by the help of mouse while scroll up & down
-    initCanvas.zoomToPoint({ x: object.e.offsetX, y: object.e.offsetY }, zoom);
+    initCanvas.zoomToPoint({ x: object?.e.offsetX, y: object?.e.offsetY }, zoom);
 
-    object.e.preventDefault();
-    object.e.stopPropagation();
+    object?.e.preventDefault();
+    object?.e.stopPropagation();
 }

@@ -2,7 +2,7 @@
 export const saveAsImg = canvas => {
 
     const ext = "png";
-    const base64 = canvas.toDataURL({
+    const base64 = canvas?.toDataURL({
         format: ext,
         enableRetinaScaling: true
     });
@@ -20,6 +20,6 @@ export const saveAsImg = canvas => {
 // save into local storage
 export const saveCanvas = canvas => {
 
-    const json = canvas.toJSON();
+    const json = canvas?.toJSON();
     localStorage.setItem('canvas', JSON.stringify(json));
 }

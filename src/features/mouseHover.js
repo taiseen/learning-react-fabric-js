@@ -1,11 +1,11 @@
 export const mouseHoverIn = initCanvas => {
 
-    initCanvas.on("mouse:over", e => {
+    initCanvas?.on("mouse:over", e => {
 
         if (e.target) {
 
             e.target.set('fill', 'green');
-            initCanvas.requestRenderAll();
+            initCanvas?.requestRenderAll();
         }
     })
 }
@@ -16,12 +16,12 @@ export const mouseHoverIn = initCanvas => {
 
 export const mouseHoverOut = initCanvas => {
 
-    initCanvas.on("mouse:out", e => {
+    initCanvas?.on("mouse:out", e => {
 
         if (e.target) {
 
             e.target.set('fill', 'blue');
-            initCanvas.requestRenderAll();
+            initCanvas?.requestRenderAll();
         }
     })
 }

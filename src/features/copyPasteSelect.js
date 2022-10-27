@@ -2,9 +2,9 @@ import { fabric } from 'fabric';
 
 export const copy = canvas => {
 
-    let activeObj = canvas.getActiveObject();
+    let activeObj = canvas?.getActiveObject();
 
-    activeObj.clone(function (cloned) {
+    activeObj?.clone(function (cloned) {
         canvas._clipboard = cloned;
         console.log(canvas)
         console.log('copy ###########################################')
@@ -18,7 +18,7 @@ export const copy = canvas => {
 
 export const past = canvas => {
 
-    let activeObj = canvas.getActiveObject();
+    let activeObj = canvas?.getActiveObject();
 
     if (!activeObj) {
         return;
@@ -36,12 +36,12 @@ export const past = canvas => {
 
 export const selectAll = canvas => {
 
-    let selectAllObject = canvas.getObjects()
+    let selectAllObject = canvas?.getObjects()
 
     // deselect currently active or selected objects from the canvas.
-    canvas.discardActiveObject();
+    canvas?.discardActiveObject();
 
     const selectedObjects = new fabric.ActiveSelection(selectAllObject, { canvas: canvas, });
-    canvas.setActiveObject(selectedObjects);
-    canvas.requestRenderAll();
+    canvas?.setActiveObject(selectedObjects);
+    canvas?.requestRenderAll();
 }

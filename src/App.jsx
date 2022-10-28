@@ -1,4 +1,4 @@
-import CanvasState from './components/CanvasState'
+import Canvas from './components/Canvas'
 
 
 const App = () => {
@@ -12,11 +12,10 @@ const App = () => {
       </h1>
 
       <section className='mx-auto py-2 w-fit'>
-        <CanvasState />
+        <Canvas />
       </section>
 
       {/* <CanvasLine /> */}
-      {/* <CanvasState /> */}
     </main>
   )
 }

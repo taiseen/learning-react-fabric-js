@@ -10,7 +10,8 @@
 
 ### Fabric Js 
 
- * `yarn add fabric` 
+ * yarn add fabric
+ * yarn add react-hot-toast
 
 
 

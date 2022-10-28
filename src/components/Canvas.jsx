@@ -1,266 +1,140 @@
-// import { useEffect, useRef, useState } from 'react'
-// import { fabric } from 'fabric';
+import { delete_multiple_selected_objects, delete_single_selected_object } from '../features/delete';
+// import { mouseHoverIn, mouseHoverOut } from '../features/mouseHover';
+import { copy, past, selectAll } from '../features/copyPasteSelect';
+import { useCanvasContext } from '../context/CanvasContext';
+import { saveAsImg, saveCanvas } from '../features/save';
+import { handleSearchText } from '../features/search';
+import { objectSelected } from '../features/utils';
+import { useEffect, useRef } from 'react'
+import { zoom } from '../features/zoom';
+import { fabric } from 'fabric';
+import Row1 from './Row1';
+import Row2 from './Row2';
 
 
-// const Canvas = () => {
+const Canvas = () => {
 
-//   const fabricObj = useRef(null);
-//   const canvasObj = useRef(null);
-//   const [userInputText, setUserInputText] = useState('');
-//   const [colorSelect, setColorSelect] = useState('blue');
-//   const [objectSelectForDelete, setObjectSelectForDelete] = useState(false);
-//   const [selectedObject, setSelectedObject] = useState({});
+  const fabricObj = useRef(null);
 
-//   const colorList = ['red', 'green', 'blue', 'gray', 'tomato', 'orange']
+  const { canvas, setCanvas, textSearching, setObjectSelectForDelete } = useCanvasContext();
 
-//   const initCanvas = () => {
-//     canvasObj.current = new fabric.Canvas(fabricObj.current, {
-//       width: 1000,
-//       height: 600,
-//       backgroundColor: '#FEFEFE',
-//       // preserveObjectStacking: true,
-//       // selection: false, 
-//       // isDrawingMode : true,
-//     });
-//   };
 
+  useEffect(() => {
 
-//   useEffect(() => {
+    // 1st init fabric canvas object... 
+    const initCanvas = new fabric.Canvas(fabricObj?.current, {
+      width: 1000,
+      height: 650,
+      backgroundColor: '#FEFEFE',
+      // selection: false, // disables drag-to-select
+      // defaultCursor:
+    });
 
-//     initCanvas();
-//     // mouseHoverIn();
-//     // mouseHoverOut();
-//     objectSelected();
-
-//     return () => canvasObj.current.dispose();;
-//   }, []);
+    setCanvas(initCanvas);
 
+    // preventing from crash, when data become ==> undefined
+    try {
+      // get old data from localStorage if have...
+      const oldSavedCanvasLocally = localStorage.getItem('canvas') !== 'undefined'
+        ? JSON.parse(localStorage.getItem('canvas'))
+        : localStorage.removeItem('canvas');
 
+      initCanvas?.loadFromJSON(oldSavedCanvasLocally);
 
+    } catch (e) {
+      console.log(e);
+    }
 
-//   const mouseHoverIn = () => {
-//     canvasObj.current.on("mouse:over", (e) => {
-//       if (e.target) {
-//         e.target.set('fill', 'green');
-//         canvasObj.current.renderAll();
-//         // objSelected = e.target
-//       }
-//     })
-//   }
+    // these are mouse events...
+    // mouseHoverIn(initCanvas);
+    // mouseHoverOut(initCanvas);
+    // objectSelected(initCanvas);
 
-//   const mouseHoverOut = () => {
-//     canvasObj.current.on("mouse:out", (e) => {
-//       if (e.target) {
-//         e.target.set('fill', 'blue');
-//         canvasObj.current.renderAll();
-//         // objSelected = e.target
-//       }
-//     })
-//   }
 
+    initCanvas.on({
+      'selection:created': objectSelected,
+      'selection:updated': objectSelected,
+    });
 
-//   const objectSelected = () => {
-//     // canvasObj.current.on('selection:created', e => {
-//     canvasObj.current.on('selection:updated', o => {
 
-//       // if value is undefined, exit form this function... 
-//       if (o?.e === undefined || o?.selected[0] === undefined) return;
+    initCanvas.on('mouse:down', _ => setObjectSelectForDelete(false));
 
-//       const selectedObj = o?.selected[0];
-//       console.log(selectedObj)
+    // only for zooming the canvas...
+    initCanvas.on('mouse:wheel', object => zoom(object, initCanvas));
 
-//       selectedObj.set('fill', colorSelect);
-//       canvasObj.current?.renderAll();
 
-//     })
+    return () => initCanvas.dispose();
 
-//   }
+  }, [fabricObj, setCanvas, setObjectSelectForDelete]);
 
-//   const drawing = _ => {
 
-//     // canvasObj.current .isDrawingMode : true,
+  useEffect(() => {
 
-//   }
+    // user keyboard, key pressing for object interaction...
+    const handleKeyDownEvent = e => {
 
+      // delete ==> key press
+      if (e.key === 'Delete' || e.key === 'Backspace') {
 
-//   // ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
-//   const drawRectangle = _ => {
-//     const rect = new fabric.Rect({
-//       id: 'rectangle',
-//       top: 50,
-//       left: 50,
-//       width: 50,
-//       height: 50,
-//       fill: colorSelect
-//     });
-//     // Render Rectangle on Canvas
-//     canvasObj.current.add(rect);
-//   }
+        // just get selected object from canvas...
+        const single_object_selected = canvas.getActiveObject();
 
+        // for singe selected object delete operation
+        if (single_object_selected) {
+          delete_single_selected_object(canvas);
+        }
 
-//   // ⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪
-//   const drawCircle = _ => {
-
-//     const canvasCenter = canvasObj.current.getCenter();
-
-//     const circle = new fabric.Circle({
-//       id: 'circle',
-//       top: canvasCenter.top,
-//       left: canvasCenter.left,
-//       radius: 50,
-//       originX: 'center',
-//       originY: 'center',
-//       fill: colorSelect,
-//       cornerColor: colorSelect,
-//     });
-
-//     // Render Circle on Canvas
-//     canvasObj.current.add(circle);
-//   }
-
+        // for multiple selected object delete operation
+        if (single_object_selected?._objects?.length) {
+          delete_multiple_selected_objects(canvas, single_object_selected?._objects)
+        }
 
-//   // 🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺
-//   const drawTriangle = _ => {
-//     const triangle = new fabric.Triangle({
-//       id: 'triangle',
-//       top: 150,
-//       left: 150,
-//       width: 100,
-//       height: 100,
-//       fill: colorSelect
-//     });
-//     // Render Rectangle on Canvas
-//     canvasObj.current.add(triangle);
-
-//   }
-
-
-//   // 📝📝📝📝📝📝📝📝📝📝📝
-//   const drawText = () => {
-
-//     // Create a new Text instance
-
-//     // const text = new fabric.Text(userInputText, {
-//     //   id: 'text',
-//     //   top: 150,
-//     //   left: 150,
-//     //   fill: colorSelect ? colorSelect : 'blue'
-//     // });
-
-//     const text = new fabric.IText(userInputText,
-//       {
-//         editable: true,
-//         left: 200,
-//         top: 200,
-//         fontSize: 60,
-//         fill: colorSelect ? colorSelect : 'blue'
-//       }
-//     );
-
-//     // Render Text on Canvas
-//     canvasObj.current.add(text)
-//   }
-
-
-
-
-
-//   const displayAllObj = _ => {
-
-//     canvasObj.current.getObjects().forEach(obj => {
-//       // console.log(obj.aCoords.tl,)
-//       console.log(obj);
-
-//       if (canvasObj.current.getActiveObject() === obj) {
-//         console.log('Selected Object ====> ', obj)
-//         // obj.hasBorders = false
-//         // obj.hasControls = false
-//         // obj.selectable = false
-//         // obj.lockRotation  = true
-//         // obj.lockScalingX = obj.lockScalingY = true;
-//         // obj.lockMovementX = true
-//         // obj.lockMovementY = true
-//         // obj.hoverCursor = 'pointer';
-//       }
-
-//     });
-//   }
-
-
-
-//   // delete selected one...
-//   // 🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
-//   const delete_selected_object = _ => {
-
-//     // loop through all objects, that present in canvas
-//     canvasObj.current.getObjects().forEach(obj => {
-//       // console.log(objectSelectForDelete);
-//       // if selected object is == equal to == this object ==> delete it from canvas...
-//       if (canvasObj.current.getActiveObject() === obj) {
-//         // setObjectSelectForDelete(true);
-//         canvasObj.current.remove(obj)
-//       }
-//     })
-
-//   }
-
-
-//   // delete all...
-//   // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-//   const delete_all_object_from_canvas = _ => {
-//     // clear canvas
-//     canvasObj.current.clear();
-//     // re-initialized empty canvas
-//     initCanvas();
-//   }
-
-
-//   return (
-//     <div>
-
-//       <div className='flex gap-4 items-center'>
-//         <button className='px-2 py-1 bg-green-300 rounded-sm' onClick={drawRectangle}>Rectangle</button>
-//         <button className='px-2 py-1 bg-green-300 rounded-sm' onClick={drawCircle}>Circle</button>
-//         <button className='px-2 py-1 bg-green-300 rounded-sm' onClick={drawTriangle}>Triangle</button>
-//         <button className='px-2 py-1 bg-green-300 rounded-sm' onClick={drawing}>Drawing</button>
-
-//         <input
-//           className='px-2 py-1 outline-none'
-//           placeholder='example text...'
-//           type="text"
-//           value={userInputText}
-//           onChange={e => setUserInputText(e.target.value)}
-//           onKeyDown={e => e.key === 'Enter' && [drawText(), setUserInputText('')]}
-//         />
-//         {/* <button className='px-2 py-1 bg-green-300 rounded-sm' onClick={() => textDraw()}>Test</button> */}
-
-//         <p onClick={displayAllObj} className='underline'>show all at console</p>
-
-//         <div className='ml-auto space-x-4'>
-//           {/* <button className={`px-2 py-1 rounded-sm ${objectSelectForDelete ? 'bg-red-400 ' : 'bg-gray-400 '}`} onClick={() => delete_selected_object()}>Delete it</button> */}
-//           <button className={`px-2 py-1 rounded-sm bg-red-400`} onClick={() => delete_selected_object()}>Delete it</button>
-//           <button className='px-2 py-1 bg-gray-500 hover:bg-red-500 duration-200 rounded-sm text-white' onClick={() => delete_all_object_from_canvas()}>Delete all</button>
-//         </div>
-
-//       </div>
-
-//       <div className='flex gap-2 my-2'>
-//         {
-//           colorList.map(color =>
-//             <div
-//               key={color}
-//               onClick={() => setColorSelect(color)}
-//               style={{ backgroundColor: color }}
-//               className='w-6 h-6 rounded-full cursor-pointer hover:opacity-60 duration-200'>
-//             </div>
-//           )
-//         }
-//       </div>
-
-//       <canvas id="canvas" ref={fabricObj} />
-//     </div>
-
-//   )
-// }
-
-// export default Canvas
+      }
+
+      // this is responsible for checking ctrl key press
+      // if we not check it, then only single press of c,v,a,s,i is going to working... which we don't want  
+      if (e.ctrlKey || e.metaKey) {
+
+        // ctrl + c ==> key press | for copy
+        if (e.key === 'c') copy(canvas);
+
+        // ctrl + v ==> key press | for past
+        if (e.key === 'v') past(canvas);
+
+        // ctrl + a ==> key press | for selecting all
+        if (e.key === 'a') selectAll(canvas);
+
+        // ctrl + s ==> key press | for save canvas as JSON format to load next time
+        if (e.key === 's') saveCanvas();
+
+        // ctrl + i ==> key press | for save as image formate
+        if (e.key === 'i') saveAsImg();
+      }
+
+    }
+
+    handleSearchText(canvas, textSearching)
+
+    window.addEventListener('keydown', handleKeyDownEvent);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDownEvent);
+    };
+  }, [canvas, textSearching])
+
+
+  return (
+    <div>
+
+      <Row1 />
+
+      <Row2 />
+
+      {/* 🟡🟡🟡 main canvas for drawing board 🟡🟡🟡 */}
+      <canvas id="canvas" ref={fabricObj} />
+
+    </div>
+  )
+}
+
+export default Canvas;

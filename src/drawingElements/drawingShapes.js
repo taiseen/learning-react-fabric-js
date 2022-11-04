@@ -17,6 +17,8 @@ export const drawRectangle = (canvas, colorSelect) => {
         fill: colorSelect,
         objectCaching: false,
         padding: 10,
+        rx: 2, // radius
+        ry: 2, // radius
     });
 
     // Render Rectangle on Canvas

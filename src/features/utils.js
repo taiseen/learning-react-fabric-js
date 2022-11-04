@@ -1,45 +1,28 @@
 import { fabric } from 'fabric';
 
+
 export const objectSelected = o => {
 
     // if value is undefined, exit form this function... 
     if (o?.e === undefined || o?.selected[0] === undefined) return;
 
     const selectedObj = o?.selected[0];
+
     selectedObj.set({
-        borderColor: 'gray',
-        hasControls: true,
+        // hasControls: false, // rotation + scale up down | OFF
+
+        // border + corner styling...
+        cornerStyle: 'circle',
+        cornerStrokeColor: 'orange',
+        borderDashArray: [5, 5],
+        borderColor: 'blue',
+
         // fill: colorSelect,
     })
 
     console.log(selectedObj.type)
-
-    return selectedObj;
-    // if (selectedObj.type) {
-    //   setObjectSelectForDelete(true)
-    // console.log('inside ==> ', objectSelectForDelete);
-    // console.log('=================================');
-    // }
-
-
-    // selectedObj.set('fill', colorSelect);
-    // canvas?.renderAll();
-
-    // console.log(e.target.fill)
-    // console.log(e.e)
-    // console.log(e.selected)
-
-    // e.selected[0].fill = colorSelect;
-
-    // if (selectedObject) {
-    // console.log(selectedObject);
-    //   setObjectSelectForDelete(true);
-    // } else {
-    //   setObjectSelectForDelete(false);
-    // }
-
-
 }
+
 
 // print all object at Console
 export const displayAllObj = canvas => {
@@ -64,6 +47,7 @@ export const displayAllObj = canvas => {
     });
 }
 
+
 export const eraseDrawing = canvas => {
     console.log('eraseing,,,,')
 
@@ -79,27 +63,4 @@ export const eraseDrawing = canvas => {
 
     // = fabric.util.createClass(fabric.BaseBrush, {})
 
-}
-
-export const loadSVG = (e, canvas) => {
-    console.log(canvas);
-    const files = e.target.files
-
-    const uploadedFile = new FormData();
-    uploadedFile.append('svg', files[0])
-
-    console.log(uploadedFile)
-
-    let imgURL = 'http://fabricjs.com/assets/1.svg';
-    console.log(imgURL)
-
-    fabric.loadSVGFromURL(imgURL, function (objects, options) {
-        var svgData = fabric.util.groupSVGElements(objects, options);
-
-        svgData.top = 100;
-        svgData.left = 250;
-        // svgData.fill = 'red';
-
-        canvas.add(svgData);
-    });
 }

@@ -5,8 +5,8 @@ import { useCanvasContext } from '../context/CanvasContext';
 import { saveAsImg, saveCanvas } from '../features/save';
 import { handleSearchText } from '../features/search';
 import { objectSelected } from '../features/utils';
-import { useEffect, useRef } from 'react'
 import { zoom } from '../features/zoom';
+import { useEffect } from 'react'
 import { fabric } from 'fabric';
 import Row1 from './Row1';
 import Row2 from './Row2';
@@ -14,9 +14,7 @@ import Row2 from './Row2';
 
 const Canvas = () => {
 
-  const fabricObj = useRef(null);
-
-  const { canvas, setCanvas, textSearching, setObjectSelectForDelete } = useCanvasContext();
+  const { fabricObj, canvas, setCanvas, textSearching, setObjectSelectForDelete } = useCanvasContext();
 
 
   useEffect(() => {
@@ -54,6 +52,12 @@ const Canvas = () => {
     initCanvas.on({
       'selection:created': objectSelected,
       'selection:updated': objectSelected,
+
+      // 'selection:created': (o) => objectSelected(o, initCanvas),
+      // 'selection:updated': (o) => objectSelected(o, initCanvas),
+
+      // 'selection:updated': (o) => objectSelected(o, canvas, colorSelect),
+      // 'object:selected': objectSelected(colorSelect),
     });
 
 
@@ -68,6 +72,8 @@ const Canvas = () => {
   }, [fabricObj, setCanvas, setObjectSelectForDelete]);
 
 
+  // all keyboard [ctrl+] related command code calling here... 
+  // text searching also calling here...
   useEffect(() => {
 
     // user keyboard, key pressing for object interaction...
@@ -113,8 +119,9 @@ const Canvas = () => {
 
     }
 
+    // call here | define it another file...
     handleSearchText(canvas, textSearching)
-
+    
     window.addEventListener('keydown', handleKeyDownEvent);
 
     return () => {

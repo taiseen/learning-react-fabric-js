@@ -3,6 +3,9 @@ export const handleSearchText = (canvas, textSearching) => {
 
     // async work | execute at background 
     // setTextSearching(e.target.value)
+    
+    // console.log('#################',textSearching)
+    // console.log(canvas)
 
     // sync work | execute it right now...
     if (Object.keys(canvas).length !== 0) {
@@ -17,12 +20,11 @@ export const handleSearchText = (canvas, textSearching) => {
                     hasControls: false
                 })
 
-
                 // select Fabric.js object programmatically
                 canvas?.setActiveObject(obj)
 
                 // ?.text.replaceAll(textSearching, `<mark>${textSearching}</mark>`)
-                console.log(obj?.text)
+                // console.log(obj?.text)
             }
         })
     }

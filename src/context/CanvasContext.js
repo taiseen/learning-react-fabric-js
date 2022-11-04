@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 
 
 // 1) context creation... 
@@ -8,6 +8,7 @@ const Canvas = createContext();
 // 2) context provide to others... 
 export const CanvasContext = ({ children }) => {
 
+    const fabricObj = useRef(null);
     const [canvas, setCanvas] = useState({});
     const [userInputText, setUserInputText] = useState(''); // user text input for paint in canvas 
     const [colorSelect, setColorSelect] = useState('blue'); // select color for shapes...
@@ -15,8 +16,9 @@ export const CanvasContext = ({ children }) => {
     const [objectSelectForDelete, setObjectSelectForDelete] = useState(false);
 
     const colorList = ['red', 'green', 'blue', 'gray', 'tomato', 'orange']
-
+    // console.log(colorSelect);
     const values = {
+        fabricObj,
         canvas, setCanvas,
         userInputText, setUserInputText,
         colorSelect, setColorSelect,

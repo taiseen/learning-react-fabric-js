@@ -1,6 +1,7 @@
 import { useCanvasContext } from '../context/CanvasContext';
 import { saveAsImg, saveCanvas } from '../features/save';
-import { displayAllObj, loadSVG } from '../features/utils';
+import { displayAllObj } from '../features/utils';
+import { loadSVG } from '../features/loadSVG';
 
 
 const Row2 = () => {
@@ -30,6 +31,14 @@ const Row2 = () => {
             </div>
 
             <div className='flex gap-2'>
+                {/* <p
+                    title='save at local-storage'
+                    // onClick={() => getFilesInfoOfBoard(canvas)}
+                    className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'
+                >
+                    IMG Upload
+                </p> */}
+
                 <label
                     htmlFor='svg'
                     className='bg-gray-400 px-2 py-1 cursor-pointer duration-200 hover:text-gray-100'

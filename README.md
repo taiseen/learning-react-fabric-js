@@ -25,6 +25,7 @@
 * 📸 save as image, whole canvas drawing + ⌨ key operation
 * 🅰 select all object that draw in canvas + ⌨ key operation
 * 🔎 canvas zoom functionality 
+* ⌨ "tab" key press event to navigate inside canvas object for selection... 
 
 <br/>
 

@@ -4,7 +4,7 @@ import { copy, past, selectAll } from '../features/copyPasteSelect';
 import { useCanvasContext } from '../context/CanvasContext';
 import { saveAsImg, saveCanvas } from '../features/save';
 import { handleSearchText } from '../features/search';
-import { objectSelected } from '../features/utils';
+import { objectSelected, tabKeyPressing } from '../features/utils';
 import { zoom } from '../features/zoom';
 import { useEffect } from 'react'
 import { fabric } from 'fabric';
@@ -97,6 +97,20 @@ const Canvas = () => {
 
       }
 
+      // tab key press event
+      if (e.key === 'Tab') {
+        e.preventDefault(); // for this statement, tab command not get out from the canvas window
+        tabKeyPressing(canvas, true);
+      }
+
+      // shift + tab key press event
+      if (e.shiftKey && e.key === 'Tab') {
+        e.preventDefault();
+
+        tabKeyPressing(canvas, false);
+      }
+
+
       // this is responsible for checking ctrl key press
       // if we not check it, then only single press of c,v,a,s,i is going to working... which we don't want  
       if (e.ctrlKey || e.metaKey) {
@@ -121,7 +135,7 @@ const Canvas = () => {
 
     // call here | define it another file...
     handleSearchText(canvas, textSearching)
-    
+
     window.addEventListener('keydown', handleKeyDownEvent);
 
     return () => {

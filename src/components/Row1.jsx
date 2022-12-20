@@ -1,7 +1,12 @@
-import { drawCircle, drawingBrush, drawRectangle, drawText, drawTriangle } from '../drawingElements/drawingShapes';
 import { delete_all_object_from_canvas, delete_single_selected_object } from '../features/delete';
 import { Rectangle, Circle, Triangle, Brush, Eraser, Text } from './../assets';
 import { useCanvasContext } from '../context/CanvasContext';
+import { drawCircle } from '../drawingTools/drawCircle';
+import { drawTriangle } from '../drawingTools/drawTriangle';
+import { drawingBrush } from '../drawingTools/drawingBrush';
+import { drawRectangle } from '../drawingTools/drawRectangle';
+import { draw_i_Text } from '../drawingTools/draw-i-Text';
+import { drawTextBox } from '../drawingTools/drawTextBox';
 
 
 const Row1 = () => {
@@ -28,11 +33,11 @@ const Row1 = () => {
             />
             <Eraser
                 className='cursor-pointer duration-200 hover:text-red-500'
-                // onClick={eraseDrawing}
+            // onClick={eraseDrawing}
             />
             <Text
                 className='cursor-pointer duration-200 hover:text-red-500'
-                onClick={() => drawText(canvas, colorSelect, userInputText)}
+                onClick={() => draw_i_Text(canvas, colorSelect, userInputText)}
             />
 
             {/* ✋✋✋ type & add this typing text into canvas ✋✋✋ */}
@@ -43,8 +48,12 @@ const Row1 = () => {
                 className='px-2 py-1 outline-none'
                 onChange={e => setUserInputText(e.target.value)}
                 // by pressing enter key, draw this text element + clear this input fields
-                onKeyDown={e => e.key === 'Enter' && [drawText(canvas, colorSelect, userInputText), setUserInputText('')]}
+                onKeyDown={e => e.key === 'Enter' && [draw_i_Text(canvas, colorSelect, userInputText), setUserInputText('')]}
             />
+
+            <p onClick={() => drawTextBox(canvas, colorSelect)}>textBox</p>
+
+
 
             <div className='ml-auto space-x-4'>
 
@@ -56,7 +65,7 @@ const Row1 = () => {
                     className='px-2 py-1 outline-none'
                     placeholder='text searching by typing...'
                     // by pressing enter key, search this text + clear this input fields
-                    onKeyDown={e => e.key === 'Enter' && [drawText(canvas, colorSelect, userInputText), setTextSearching('')]}
+                    onKeyDown={e => e.key === 'Enter' && [draw_i_Text(canvas, colorSelect, userInputText), setTextSearching('')]}
                 />
 
                 <button

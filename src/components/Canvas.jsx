@@ -21,8 +21,8 @@ const Canvas = () => {
 
     // 1st init fabric canvas object... 
     const initCanvas = new fabric.Canvas(fabricObj?.current, {
-      width: 1000,
-      height: 650,
+      width: window.innerWidth - 20,
+      height: window.innerHeight - 80,
       backgroundColor: '#FEFEFE',
       // selection: false, // disables drag-to-select
       // defaultCursor:
@@ -145,11 +145,12 @@ const Canvas = () => {
 
 
   return (
-    <div>
+    <div className=''>
 
-      <Row1 />
-
-      <Row2 />
+      <div className='fixed top-0 left-0 right-0 p-4 z-30'>
+        <Row1 />
+        <Row2 />
+      </div>
 
       {/* 🟡🟡🟡 main canvas for drawing board 🟡🟡🟡 */}
       <canvas id="canvas" ref={fabricObj} />

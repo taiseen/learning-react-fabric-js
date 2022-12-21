@@ -49,3 +49,50 @@ while we’re actually working on the lower canvas layer & The lower canvas cont
 
 * `canvas.clear()` will clear all objects on canvas.
 * `canvas.dispose()` will clear all objects on canvas & remove all listeners.
+
+
+```
+├── assets
+|   ├── Brush.jsx
+|   ├── Circle.jsx
+|   ├── Eraser.jsx
+|   ├── index.js
+|   ├── Rectangle.jsx
+|   ├── Text.jsx
+|   └── Triangle.jsx
+|
+├── components
+|   ├── Canvas.jsx
+|   ├── CanvasLine.jsx
+|   ├── Row1.jsx
+|   └── Row2.jsx
+|
+├── context
+|   └── CanvasContext.js
+|
+├── drawingTools
+|   ├── draw-i-Text.js
+|   ├── drawCircle.js
+|   ├── drawingBrush.js
+|   ├── drawRectangle.js
+|   ├── drawText.js
+|   ├── drawTextBox.js
+|   └── drawTriangle.js
+|
+├── features
+|   ├── copyPasteSelect.js
+|   ├── delete.js
+|   ├── loadSVG.js
+|   ├── mouseHover.js
+|   ├── r&d.js
+|   ├── save.js
+|   ├── search.js
+|   ├── utils.js
+|   └── zoom.js
+|
+├── style
+|   └── index.css
+|
+├── App.jsx
+└── index.js
+```

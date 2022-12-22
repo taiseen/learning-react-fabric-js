@@ -8,6 +8,7 @@ import { objectSelected, tabKeyPressing } from '../features/utils';
 import { zoom } from '../features/zoom';
 import { useEffect } from 'react'
 import { fabric } from 'fabric';
+import capsLockKeyEvent from '../features/capsLockKeyEvent';
 import Row1 from './Row1';
 import Row2 from './Row2';
 
@@ -137,12 +138,20 @@ const Canvas = () => {
     handleSearchText(canvas, textSearching)
 
     window.addEventListener('keydown', handleKeyDownEvent);
+    // window.addEventListener('mousemove', getMousePointerLocation);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDownEvent);
     };
   }, [canvas, textSearching])
 
+
+  useEffect(() => {
+
+    window.addEventListener('keyup', capsLockKeyEvent);
+
+    return () => window.removeEventListener('keyup', capsLockKeyEvent);;
+  }, []);
 
   return (
     <div className=''>

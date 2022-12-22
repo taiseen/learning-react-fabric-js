@@ -26,6 +26,8 @@
 * 🅰 select all object that draw in canvas + ⌨ key operation
 * 🔎 canvas zoom functionality 
 * ⌨ "tab" key press event to navigate inside canvas object for selection... 
+* Check that Caps Lock is on
+* Get the mouse position
 
 <br/>
 
@@ -50,8 +52,10 @@ while we’re actually working on the lower canvas layer & The lower canvas cont
 * `canvas.clear()` will clear all objects on canvas.
 * `canvas.dispose()` will clear all objects on canvas & remove all listeners.
 
+## File & Folder hierarchy
 
 ```
+src
 ├── assets
 |   ├── Brush.jsx
 |   ├── Circle.jsx

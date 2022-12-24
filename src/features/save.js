@@ -24,6 +24,7 @@ export const saveCanvas = canvas => {
 
     const json = canvas?.toJSON();
 
+    // canvas save into local storage...
     localStorage.setItem('canvas', JSON.stringify(json));
 
     // just UI toast notification for user...

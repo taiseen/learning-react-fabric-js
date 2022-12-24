@@ -1,6 +1,6 @@
 import { toast } from 'react-hot-toast';
 
-const capsLockKeyEvent = (e) => {
+export const capsLockKeyEvent = (event) => {
 
     const uiStyle = {
         duration: 3000,
@@ -9,12 +9,13 @@ const capsLockKeyEvent = (e) => {
         },
     }
 
-    if (e.getModifierState('CapsLock')) {
-        toast.success(`CapsLock is on.`, { ...uiStyle, style: { ...uiStyle.style, background: '#ff7f8a' } });
-    }
-    if (!e.getModifierState('CapsLock')) {
-        toast.success(`CapsLock is off.`, uiStyle);
+    // By default, the keydown event is triggered whenever any key is pressed on the keyboard, including the caps lock key.
+    // If you want to check the caps lock state and only fire an event when the caps lock key is pressed, 
+    // you can use the key property of the KeyboardEvent object to check the key that was pressed.
+
+    if (event.key === 'CapsLock') {
+        event.getModifierState('CapsLock')
+            ? toast.success(`CapsLock is on.`, { ...uiStyle, style: { ...uiStyle.style, background: '#ff7f8a' } })
+            : toast.success(`CapsLock is off.`, uiStyle);
     }
 }
-
-export default capsLockKeyEvent;

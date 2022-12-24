@@ -5,10 +5,10 @@ import { useCanvasContext } from '../context/CanvasContext';
 import { saveAsImg, saveCanvas } from '../features/save';
 import { handleSearchText } from '../features/search';
 import { objectSelected, tabKeyPressing } from '../features/utils';
+import { capsLockKeyEvent } from '../features/capsLockKeyEvent';
 import { zoom } from '../features/zoom';
 import { useEffect } from 'react'
 import { fabric } from 'fabric';
-import capsLockKeyEvent from '../features/capsLockKeyEvent';
 import Row1 from './Row1';
 import Row2 from './Row2';
 
@@ -148,9 +148,9 @@ const Canvas = () => {
 
   useEffect(() => {
 
-    window.addEventListener('keyup', capsLockKeyEvent);
+    document.addEventListener('keydown', capsLockKeyEvent);
 
-    return () => window.removeEventListener('keyup', capsLockKeyEvent);;
+    return () => { document.removeEventListener('keydown', capsLockKeyEvent) };
   }, []);
 
   return (

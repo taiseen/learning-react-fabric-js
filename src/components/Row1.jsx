@@ -1,12 +1,12 @@
 import { delete_all_object_from_canvas, delete_single_selected_object } from '../features/delete';
 import { Rectangle, Circle, Triangle, Brush, Eraser, Text } from './../assets';
 import { useCanvasContext } from '../context/CanvasContext';
-import { drawCircle } from '../drawingTools/drawCircle';
-import { drawTriangle } from '../drawingTools/drawTriangle';
-import { drawingBrush } from '../drawingTools/drawingBrush';
-import { drawRectangle } from '../drawingTools/drawRectangle';
-import { draw_i_Text } from '../drawingTools/draw-i-Text';
-import { drawTextBox } from '../drawingTools/drawTextBox';
+import { drawCircle } from '../drawingTools/shapes/drawCircle';
+import { drawTriangle } from '../drawingTools/shapes/drawTriangle';
+import { drawingBrush } from '../drawingTools/shapes/drawingBrush';
+import { drawRectangle } from '../drawingTools/shapes/drawRectangle';
+import { draw_i_Text } from '../drawingTools/texts/draw-i-Text';
+import { drawTextBox } from '../drawingTools/texts/drawTextBox';
 
 
 const Row1 = () => {

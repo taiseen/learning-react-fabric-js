@@ -1,3 +1,4 @@
+import { drawStickyNote } from '../drawingTools/texts/drawStickyNote';
 import { handleKeyDownEvent } from '../features/handleKeyDownEvent';
 import { capsLockKeyEvent } from '../features/capsLockKeyEvent';
 import { useCanvasContext } from '../context/CanvasContext';
@@ -28,6 +29,7 @@ const Canvas = () => {
 
     setCanvas(initCanvas);
 
+    drawStickyNote(initCanvas)
     // preventing from crash, when data become ==> undefined
     try {
       // get old data from localStorage if have...

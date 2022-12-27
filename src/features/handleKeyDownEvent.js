@@ -11,7 +11,7 @@ export const handleKeyDownEvent = (e, canvas) => {
         try {
             // just get selected object from canvas...
             const single_object_selected = canvas.getActiveObject();
-
+            
             // for singe selected object delete operation
             if (single_object_selected) {
                 delete_single_selected_object(canvas);

@@ -26,8 +26,10 @@
 * 🅰 select all object that draw in canvas + ⌨ key operation
 * 🔎 canvas zoom functionality 
 * ⌨ "tab" key press event to navigate inside canvas object for selection... 
-* Check that Caps Lock is on
-* Get the mouse position
+* ⌨ Check that Caps Lock is on
+* 🖱️ Get the mouse position
+* 📝 StickyNote demo testing add...
+
 
 <br/>
 

@@ -7,6 +7,7 @@ import { drawingBrush } from '../drawingTools/shapes/drawingBrush';
 import { drawRectangle } from '../drawingTools/shapes/drawRectangle';
 import { draw_i_Text } from '../drawingTools/texts/draw-i-Text';
 import { drawTextBox } from '../drawingTools/texts/drawTextBox';
+import { searchText } from '../drawingTools/texts/searchText';
 
 
 const Row1 = () => {
@@ -65,7 +66,7 @@ const Row1 = () => {
                     className='px-2 py-1 outline-none'
                     placeholder='text searching by typing...'
                     // by pressing enter key, search this text + clear this input fields
-                    onKeyDown={e => e.key === 'Enter' && [draw_i_Text(canvas, colorSelect, userInputText), setTextSearching('')]}
+                    onKeyDown={e => e.key === 'Enter' && [searchText(canvas, textSearching), setTextSearching('')]}
                 />
 
                 <button

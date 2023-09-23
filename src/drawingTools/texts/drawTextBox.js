@@ -66,6 +66,7 @@ export const drawTextBox = (canvas, colorSelect) => {
     const hashtags = [...textBox.text.matchAll(/#(\w+)/g)];
     const textStyling = heading || numbers
 
+    console.log(textStyling);
     if (textStyling) {
         // Iterate over the array of matches
         for (var i = 0; i < textStyling.length; i++) {

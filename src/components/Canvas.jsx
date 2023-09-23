@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { fabric } from 'fabric';
 import Row1 from './Row1';
 import Row2 from './Row2';
+import binaryTree from '../drawingTools/binaryTree/binaryTree';
 
 
 const Canvas = () => {
@@ -20,16 +21,20 @@ const Canvas = () => {
 
     // 1st init fabric canvas object... 
     const initCanvas = new fabric.Canvas(fabricObj?.current, {
-      width: window.innerWidth - 20,
-      height: window.innerHeight - 80,
-      backgroundColor: '#FEFEFE',
+      width: window.innerWidth,
+      height: window.innerHeight,
+      backgroundColor: '',
       // selection: false, // disables drag-to-select
       // defaultCursor:
     });
 
     setCanvas(initCanvas);
 
-    drawStickyNote(initCanvas)
+    // drawStickyNote(initCanvas)
+
+    binaryTree(initCanvas)
+
+
     // preventing from crash, when data become ==> undefined
     try {
       // get old data from localStorage if have...
@@ -67,6 +72,7 @@ const Canvas = () => {
     initCanvas.on('mouse:wheel', object => zoom(object, initCanvas));
 
 
+
     return () => initCanvas.dispose();
 
   }, [fabricObj, setCanvas, setObjectSelectForDelete]);
@@ -98,7 +104,7 @@ const Canvas = () => {
   return (
     <div className=''>
 
-      <div className='fixed top-0 left-0 right-0 p-4 z-30'>
+      <div className='fixed top-0 left-0 right-0 p-2 z-30'>
         <Row1 />
         <Row2 />
       </div>
